@@ -3,30 +3,21 @@ from src.insights.jobs import read
 
 
 def get_max_salary(path: str) -> int:
-    max_value = 0
-    for row in read(path):
-        if len(row["max_salary"]) > 0 and row["max_salary"].isdigit():
-            if int(row["max_salary"]) > max_value:
-                max_value = int(row["max_salary"])
-    return max_value
+    # isso aqui é uma compreension, coloquei quebra de linhas
+    # para não estourar a regra do flake8 de linhas máximas
+    max_value = list(
+        int(row["max_salary"])
+        for row in read(path) if row["max_salary"].isdigit()
+    )
+    return max(max_value)
 
 
 def get_min_salary(path: str) -> int:
-    """Get the minimum salary of all jobs
-
-    Must call `read`
-
-    Parameters
-    ----------
-    path : str
-        Must be passed to `read`
-
-    Returns
-    -------
-    int
-        The minimum salary paid out of all job opportunities
-    """
-    raise NotImplementedError
+    min_value = list(
+        int(row["min_salary"])
+        for row in read(path) if row["min_salary"].isdigit()
+    )
+    return min(min_value)
 
 
 def matches_salary_range(job: Dict, salary: Union[int, str]) -> bool:
